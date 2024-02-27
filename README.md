@@ -1,6 +1,27 @@
 # NYU-Greene-HPC-Cheatsheet
 A beginner note for getting started with nyu greene hpc
 
+## Quick Start
+If you are not interested in how HPC works, and just want to set up a python environment and run your code, you can use the following steps to get started.
+Step1: Log in to greene
+```
+ssh <netid>@greene.hpc.nyu.edu
+```
+Step2: change to your scratch directory (always remember to save everything in your scratch directory)
+```
+cd /scratch/<netid>
+```
+Step3: setup the singularity environment with conda
+download the shell script I wrote for setting up the environment
+```
+wget https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/launcher.sh
+chmod +x launcher.sh
+./launcher.sh
+```
+
+
+
+
 ## NYU HPC Websites
 * [Home](https://sites.google.com/nyu.edu/nyu-hpc/home?authuser=0)
 * [Set up conda environment with python](https://sites.google.com/nyu.edu/nyu-hpc/hpc-systems/greene/software/singularity-with-miniconda)

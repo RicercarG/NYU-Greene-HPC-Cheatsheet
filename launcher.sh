@@ -118,8 +118,7 @@ select overlay in "${options[@]}"; do
 done
 
 cp -rp /scratch/work/public/overlay-fs-ext3/$overlay.ext3.gz $env_dir
-echo "unzipping your singularity $overlay, it will take a long time, please be patient"
-echo "there will be no more options to select, so just lay down an wait until the script finishs"
+echo "unzipping your singularity $overlay, it will take a long time, please be patient"e
 gunzip $env_dir/$overlay.ext3.gz
 echo "unzip finished"
 

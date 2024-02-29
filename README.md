@@ -3,26 +3,26 @@ A beginner guide for getting started with nyu greene hpc
 
 ## This repo is still under construction
 * Quick Starting Pack
-	[ ] Connect to HPC
-	[ ] Request CPU/GPU Sessions
-	[x] Interactive sessions for conda
-	[ ] Batch jobs
-	[ ] Jupyter Notebook
+	-[ ] Connect to HPC
+	-[ ] Request CPU/GPU Sessions
+	-[x] Interactive sessions for conda
+	-[ ] Batch jobs
+	-[ ] Jupyter Notebook
 * Manual Setup
-	[ ] Recommended tools to learn
-	[x] Offical guide links
-	[ ] Set up your own singularity and conda
-	[ ] Set up your own jupyter notebook
+	-[ ] Recommended tools to learn
+	-[x] Offical guide links
+	-[ ] Set up your own singularity and conda
+	-[ ] Set up your own jupyter notebook
 * Trouble Shooting
-	[x] Disk quota exceeded
-	[x] Could not login server through vscode
-	[x] Out of Memory Error
-	[ ] Could not open singularity environment
+	-[x] Disk quota exceeded
+	-[x] Could not login server through vscode
+	-[x] Out of Memory Error
+	-[ ] Could not open singularity environment
 * Useful Tricks
-	[ ] Setup bashrc
-	[ ] Setup ssh key pairs
-	[x] File management commands
-	[ ] Access through ipad
+	-[ ] Setup bashrc
+	-[ ] Setup ssh key pairs
+	-[x] File management commands
+	-[ ] Access through ipad
 
 ## Quick Start
 If you are not interested in how HPC operates, and just want to set up a python environment to run your code, then use the following steps to get started.

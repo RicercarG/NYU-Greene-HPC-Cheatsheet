@@ -2,6 +2,10 @@
 
 root_dir=$(dirname "$(realpath "$0")")
 
+# Extract the whole data directory for singularity binding
+IFS='/' read -ra root_dir_list <<< "$root_dir"
+data_dir="/${root_dir_list[1]}/${root_dir_list[2]}"
+
 echo "Name Your Singularity Folder: "
 read folder_name
 
@@ -18,14 +22,14 @@ if [ -d $env_dir ]; then
                 overlay=$(find "$env_dir" -type f -name "*overlay*" | head -n 1)
                 echo "Entering singularity $folder_name"
                 echo "Always remember to activate your conda environment by typing: source /ext3/env.sh"
-                singularity exec --overlay $overlay:ro $singularity_file /bin/bash
+                singularity exec --nv --bind $data_dir --overlay $overlay:ro $singularity_file /bin/bash
                 exit 1
                 break
                 ;;
             "start singularity env in read and write mode")
                 singularity_file=$(find "$env_dir" -type f -name "*cuda*" | head -n 1)
                 overlay=$(find "$env_dir" -type f -name "*overlay*" | head -n 1)
-                singularity exec --overlay $overlay:rw $singularity_file /bin/bash
+                singularity exec --nv --bind $data_dir --overlay $overlay:rw $singularity_file /bin/bash
                 exit 1
                 break
                 ;;
@@ -124,7 +128,7 @@ echo "unzip finished"
 
 
 # start overlay and download conda
-singularity exec --overlay $env_dir/$overlay.ext3:rw $env_dir/$singularity_file /bin/bash -c "
+singularity exec --nv --bind $data_dir --overlay $env_dir/$overlay.ext3:rw $env_dir/$singularity_file /bin/bash -c "
 
 # download and install miniconda
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -151,6 +155,6 @@ which pip
 "
 
 echo "You are all set! To start the singularity, type the following:"
-echo "singularity exec --overlay $env_dir/$overlay.ext3:rw $env_dir/$singularity_file /bin/bash"
+echo "singularity exec --nv --bind $data_dir --overlay $env_dir/$overlay.ext3:rw $env_dir/$singularity_file /bin/bash"
 echo "To quit the singularity, simply type exit in command line"
 echo "You can start always this singularity environment by rerunning this file and type in the environment name"

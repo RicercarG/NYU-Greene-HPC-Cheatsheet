@@ -14,7 +14,7 @@ if ! is_integer "$num_cpu"; then
     exit 1
 fi
 if [ "$num_cpu" -ne 0 ]; then
-    read -p "How many GPUs do you want? Type 0 to use CPU only: " num_gpu
+    read -p "How many GPUs do you want? (Type 0 to use CPU only): " num_gpu
     if ! is_integer "$num_gpu"; then
         echo "Error: Input is not an integer."
         exit 1

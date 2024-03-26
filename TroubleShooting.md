@@ -18,7 +18,7 @@ for d in $(find $(pwd) -maxdepth 1 -mindepth 1 -type d | sort -u); do n_files=$(
 Delete files in `$Home` (most probably python packages), then you will be fine
 
 ## Could not login server through vscode
-If you successfully logged in HPC through vscode before, but now you cannot it is most probably because of "Disk quota exceeded". You can login with terminal and check disk quota. 
+If you successfully logged in HPC through vscode before, but now you cannot it is most probably because of "Disk quota exceeded". You can login with terminal and check disk quota using `myquota`. 
 If use find `.vscode-server` contains a lot of files, then delete them and you will be fine:
 ```
 rm -rf .vscode-server

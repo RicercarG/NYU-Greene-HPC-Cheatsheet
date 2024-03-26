@@ -1,6 +1,6 @@
 #!/bin/bash
 
-root_dir=$(pwd)
+root_dir=$(dirname "$(realpath "$0")")
 
 echo "Name Your Singularity Folder: "
 read folder_name

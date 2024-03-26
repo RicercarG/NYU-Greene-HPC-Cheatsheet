@@ -4,7 +4,7 @@ A beginner guide for getting started with nyu greene hpc
 ## This repo is still under construction
 * Quick Starting Pack
 	- [ ] Connect to HPC
-	- [ ] Request CPU/GPU Sessions
+	- [x] Request CPU/GPU Sessions
 	- [x] Interactive sessions for conda
 	- [ ] Batch jobs
 	- [ ] Jupyter Notebook
@@ -18,33 +18,43 @@ A beginner guide for getting started with nyu greene hpc
 	- [x] Could not login server through vscode
 	- [x] Out of Memory Error
 	- [ ] Could not open singularity environment
-* Useful Tricks
+* Advanced Tricks
 	- [ ] Setup bashrc
 	- [ ] Setup ssh key pairs
 	- [x] File management commands
-	- [ ] Access through ipad
+	- [ ] Access through iPad
 
 ## Quick Start
 If you are not interested in how HPC operates, and just want to set up a python environment to run your code, then use the following steps to get started.
 ### Interactive Sessions
-* Step1: Log in to greene
+#### Step1: Log in to greene
 ```
 ssh <netid>@greene.hpc.nyu.edu
 ```
-* Step2: change to your scratch directory
+#### Step2: Change to your scratch directory
 HPC Greene grants you an extremely small disk quota of `space50GB/files30K` in your home directory, which is not sufficient for storing your project and python libraries. You should always save your data in scratch directory.
 
 ```
 cd /scratch/<netid>
 ```
-* Step3: setup the singularity environment with conda
+
+#### Step3: Request an interactive CPU/GPU session
+It's always a good practice to request for a CPU/GPU node before running any code. I wrote a shell script to help you request a CPU/GPU node.
+```
+wget https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/HPC_DEVICE_REQUEST.sh
+chmod +rx HPC_DEVICE_REQUEST.sh
+./HPC_DEVICE_REQUEST.sh
+```
+
+
+#### Step4: Setup the singularity environment with conda
 You can consider `singularity` as a container that wraps up all small programs in python libraries into one large file. In this way, you won't be bothered with errors cause by exceeding quota of file number. <br>
 Good news is that you don't have to setup singularity with conda installed from scratch any more. <br>
 Download the shell script I wrote, and it will do all the work for you.
 ```
-wget https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/launcher.sh
-chmod +rx launcher.sh
-./launcher.sh
+wget https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/HPC_SING_LAUNCHER.sh
+chmod +rx HPC_SING_LAUNCHER.sh
+./HPC_SING_LAUNCHER.sh
 ```
 <details>
 	<summary>What do these prompted options mean during installation?</summary>
@@ -53,10 +63,10 @@ chmod +rx launcher.sh
 	* `Size of overlay`: This decides how large and how many python libraries you can install. For LLM or Diffusers projects, I empirically recommand `overlay-50G-10M`.
 </details>
 
-* Step4: Activate the singularity and conda environment
+#### Step5: Activate the singularity and conda environment
 Run the sample script again, and type in the name of your singularity folder that you have created in the previous step.
 ```
-./launcher.sh
+./HPC_SING_LAUNCHER.sh
 ```
 <details>
 	<summary>What's the different between Read and Write mode?</summary>
@@ -69,7 +79,7 @@ Run the sample script again, and type in the name of your singularity folder tha
 ## Table of Contents
 * [Manual Setup](MaunalSetup.md)
 * [Trouble Shooting](TroubleShooting.md)
-* [Useful Tricks](UsefulTricks.md)
+* [Advanced Tricks](AdvancedTricks.md)
 
 ## Acknowledgement
 * [HPC Home](https://sites.google.com/nyu.edu/nyu-hpc/home?authuser=0)

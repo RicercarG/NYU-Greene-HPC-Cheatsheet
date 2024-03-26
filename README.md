@@ -32,15 +32,15 @@ A beginner guide for getting started with running python on nyu greene hpc.
 	- [x] Access through iPad
 
 ## Table of Contents
-* [Prerequisits](## Prereq)
-* [Access HPC](## Access HPC)
-* [HPC File System](## HPC File System)
+* [Prerequisits](#Prereq)
+* [Access HPC](#AccessHPC)
+* [HPC File System](#HPCFileSystem)
 * [Quick Start for Conda Environment](QuickStart.md) <- Check this if you are lazy and just want to get your python code running
 * [Manual Setup](MaunalSetup.md)
 * [Trouble Shooting](TroubleShooting.md) <- I tried to cover all the problems I encountered as possible
 * [Advanced Tricks](AdvancedTricks.md)
 
-## Prereq
+## PrereqPrerequisits {#Prereq}
 ### Apply for NYU Greene HPC access
 Just follow the [official guide](https://www.nyu.edu/life/information-technology/research-computing-services/high-performance-computing/high-performance-computing-nyu-it/hpc-accounts-and-eligibility.html#eligibility). If you are an NYU student, you do need a faculty sponsor to apply for an account.
 
@@ -54,7 +54,7 @@ Vim is the default text editor in HPC. It's not mendatory, but learning vim will
 One of the killer features in vscode is being able to connect to a remote server easily. Even though I'm a fan of sublime and zed, I turn to vscode when using HPC. 
 
 
-## Access HPC
+## Access HPC {#AccessHPC}
 ### Option1: Connect through terminal
 Open terminal app on your mac/windows/linux, and type
 ```
@@ -75,7 +75,7 @@ Open command palette (using `F1`) and type `Remote-SSH: Connect to Host...`. You
 ```
 Replace <netid> with your own. You will be prompted to enter your password, which is the same as your nyu account.
 
-## HPC File System
+## HPC File System {#HPCFileSystem}
 ### Overview of the four folders that you have access to
 ```
 /home/$USER

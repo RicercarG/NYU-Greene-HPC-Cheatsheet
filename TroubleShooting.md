@@ -7,7 +7,7 @@
 * To kill a running job, type `scancel <jobid>`. You can see all your job ids using `squeue -u <netid>` (replace <netid> with your own)
 
 
-## How Can I jump back when kicked off by accident?
+## How Can I jump back when kicked off by accident? {#jumpback}
 Sometimes you might be kicked off from hpc by accident, and lost everything when you login back. In most cases, your interactive CPU/GPU jobs will be killed, and you have to start everything again. However, you can try your luck to jump back to your cpu/gpu node by:
 * See the running job using `squeue -u <netid>` (replace <netid> with your own). Find the <node-name> you want under `NODELIST`
 * Log back in using `ssh <node-name>`. 
@@ -52,7 +52,7 @@ or watch in realtime using
 watch -n 1 nvidia-smi
 ```
 I personally recommend logging in the same GPU node using two terminals, one for running your code, the other for monitoring the GPU memory usage. It's easy to do in both terminal and vscode integrated terminal. <br>
-Check [this](## How Can I jump back when kicked off by accident?) for how to jump to the desired node.
+Check [this](#jumpback) for how to jump to the desired node.
 
 
 

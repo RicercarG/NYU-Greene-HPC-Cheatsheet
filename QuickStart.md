@@ -1,7 +1,8 @@
 # Quick Start for Conda Environment
 If you are not interested in how HPC operates, and just want to set up a python environment to run your code, then use the following steps to get started.
 ## Interactive Sessions
-#### Step1: Log in to greene
+### First Time Setup
+#### Step1: Connect to NYU VPN/Wifi, log in to greene in terminal/vscode
 ```
 ssh <netid>@greene.hpc.nyu.edu
 ```
@@ -53,6 +54,7 @@ Run the script to setup singularity and conda.
 	- `Name Your Singularity Folder`: Since you can have multiple singularity environments, you should give a unique name to your singularity folder. <span style="color:orange">You will use this name to activate your singularity environment.</span> It's a good practice to set up a new singularity environment for each project.<br>
 	- `cuda version`: This should be based on your project. If not specified, cuda 11.8 works for most cases.<br>
 	- `Size of overlay`: This decides how large and how many python libraries you can install. For LLM or Diffusers projects, I empirically recommand `overlay-50G-10M`.
+	- `Open on demand jupyter notebook?`: The way of running jupyter notebook on hpc is using `open on demand`. Some operations need to be done to enable your conda environment to be recognized by notebook. Type 'y' to let the script do the work for you.
 </details>
 
 #### Step5: Activate the singularity and conda environment
@@ -61,6 +63,11 @@ Run the sample script again, and type in your singularity folder name that you c
 ./chslauncher.sh
 ```
 If you see your terminal prompt changes to `singularity:~$`, then you are successfully activated the singularity environment. <br>
+Now you can activate conda by typing
+```
+source /ext3/env.sh
+```
+**I didn't include this in the shell script because it's important to remember activating conda each time you enter a singularity overlay.**<br>
 <details>
 	<summary style="color:orange">What's the different between Read and Write mode?</summary>
 	- `Read and Write`: You can add files into the singularity. This is useful when you are setting up your conda environment. However, one singularity overlay can only be written by one process at a time. <br>
@@ -68,6 +75,9 @@ If you see your terminal prompt changes to `singularity:~$`, then you are succes
 </details>
 
 #### Step6: Double check the conda environment, and start coding
+When this script is finished, you will see a new folder in your scratch directory named as your singularity folder name. That's where everything used for running python is stored.
+
+
 Once you activated your conda environment inside singularity using `source /ext3/env.sh`, check your conda path by
 ```
 which conda
@@ -86,3 +96,47 @@ Now you are all set. Install your python libaries, and run python using `python 
 
 ***
 **If you want to quit the singularity, or meet any other problems, check the [trouble shooting](Troubleshooting.md) guide.**
+
+### Afterwards
+The next time you login to HPC after setting up, all you need to do are:
+
+Change to your scratch directory
+```
+cd /scratch/<netid>
+```
+
+Request a CPU/GPU node
+```
+./chsdevice.sh
+```
+
+Activate/Create the singularity environment
+```
+./chslauncher.sh
+```
+
+Activate conda inside singularity (and also activate/create your conda environment if necessary)
+```
+source /ext3/env.sh
+```
+
+Then you can start testing your python scripts. Just that easy.
+
+## Open On Demand Jupyter Notebook 
+To run jupyter notebook on HPC, you have to use [open on demand](https://ood.hpc.nyu.edu/).
+
+The [official ood guide](https://sites.google.com/nyu.edu/nyu-hpc/hpc-systems/greene/software/open-ondemand-ood-with-condasingularity#h.pjqb0en5ivqf) has a nice illustration on how to use the gui. 
+
+You don't need to be bothered with steps for setting up singularity and conda environment in the offical guide, if you follow the instructions below:
+
+You need to create a python environment that can be recognized by the notebook. Everything is the same as setting up/opening singularity environment for interactive sessions. 
+
+The only thing you should notice that type 'y' if prompted `Do you want to use this python environment in open on demand jupyter notebook?` when setting up a new singularity, or select `setup this environment for jupyter notebook in OOD` when launching existing singularity environment. 
+
+This should only be done once for each singularity.
+
+If you want to install package in the conda environment in order to use then in jupyter notebook, remember to activate 
+```
+conda activate base
+```
+Empirically, if you don't, your package will not be recognized in jupyter notebook. All packages you installed using `!pip` inside notebook will go to `/home/$USER/.local`, which will probably exceed your quota.

@@ -31,6 +31,31 @@ for d in $(find $(pwd) -maxdepth 1 -mindepth 1 -type d | sort -u); do n_files=$(
 
 Delete files in `$Home` (most probably python packages), then you will be fine
 
+
+## "Man-In-The-Middle" Warning
+If you see warning like 
+```
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+```
+when trying to login HPC, don't be alarmed. That's an issue caused by HPC having multiple login nodes.
+
+
+To avoid this, simply open ssh config file at `~/.ssh/config` with your favorite text editor, and add the following lines:
+```
+Host *.hpc.nyu.edu
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  LogLevel ERROR
+```
+Now you can login HPC without seeing the warning.
+
+
 ## Could not login server through vscode
 If you successfully logged in HPC through vscode before, but now you cannot it is most probably because of "Disk quota exceeded". You can login with terminal and check disk quota using `myquota`. 
 If use find `.vscode-server` contains a lot of files, then delete them and you will be fine:
@@ -39,6 +64,7 @@ rm -rf .vscode-server
 ```
 
 The reason is mainly because you installed too many extensions in vscode. After delecting `.vscode-server`, all extensions on HPC vscode will be removed (it won't affect vscode on your local machine).
+
 
 
 ## Out of Memory Error

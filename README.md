@@ -15,13 +15,14 @@ Feel free to raise an issue if you have any questions.
 	* [How can I quit python/singualrity/runtime?](TroubleShooting.md#how-can-i-quit)
 	* [How can I jump back when kicked off by accident?](TroubleShooting.md#how-can-i-jump-back-when-kicked-off-by-accident)
 	* [Disk quota exceeded](TroubleShooting.md#disk-quota-exceeded)
+	* ["Man-In-The-Middle" Warning](TroubleShooting.md#man-in-the-middle-warning)
 	* [Could not login server through vscode](TroubleShooting.md#could-not-login-server-through-vscode)
 	* [Out of Memory Error](TroubleShooting.md#out-of-memory-error)
 		* [Check GPU Status](TroubleShooting.md#check-gpu-status)
 		* [Check CPU Status](TroubleShooting.md#check-cpu-status)
 	* [Could not open singularity environment](TroubleShooting.md#could-not-open-singularity-environment)
 	* [Some linux commands could not be executed](TroubleShooting.md#some-linux-commands-could-not-be-executed)
-* [Advanced Tricks](AdvancedTricks.md)
+* [Useful Tricks](UsefulTricks.md)
 
 ***
 ## Prerequisits
@@ -29,7 +30,9 @@ Feel free to raise an issue if you have any questions.
 Just follow the [official guide](https://www.nyu.edu/life/information-technology/research-computing-services/high-performance-computing/high-performance-computing-nyu-it/hpc-accounts-and-eligibility.html#eligibility). If you are a NYU student, you do need a faculty sponsor to apply for an account.
 
 ### Basic Linux commands
-There are lots of linux beginner guide online. Pick anyone you like, for example the cheat sheet from [GeeksforGeeks](https://www.geeksforgeeks.org/linux-commands-cheat-sheet/). Or just ask chatGPT, it knows everything.
+The most frequently used liunx commands are covered in [Hammond Liu's HPC Notes](https://abstracted-crime-34a.notion.site/Basic-Command-e8c7524b71344c4aaede6786b451e83a).
+
+If you want to learn more, there are lots of linux beginner guide online. Pick anyone you like, for example the cheat sheet from [GeeksforGeeks](https://www.geeksforgeeks.org/linux-commands-cheat-sheet/). Or just ask chatGPT, it knows everything.
 
 ### Vim
 Vim is the default text editor in HPC. It's not mendatory, but learning vim will make life much easier. I personally recommend this [guide](https://github.com/iggredible/Learn-Vim?tab=readme-ov-file). You can also learn vim through playing a [video game](https://vim-adventures.com/)
@@ -100,8 +103,8 @@ Update: The most essential parts have been finished. Here is the to-do list:
 	- [x] Connect to HPC
 	- [x] Request CPU/GPU Sessions
 	- [x] Interactive sessions for conda
+	- [x] Jupyter Notebook
 	- [ ] Batch jobs
-	- [ ] Jupyter Notebook
 * Manual Setup
 	- [x] Offical guide links
 	- [ ] Set up your own singularity and conda

@@ -1,4 +1,8 @@
-# Advanced Tricks
+# Useful Tricks
+
+## Setup ssh key pairs
+
+
 ## File Management
 * delete files by file name recursively
 ```

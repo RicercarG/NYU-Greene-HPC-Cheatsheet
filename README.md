@@ -1,5 +1,8 @@
 # NYU-Greene-HPC-Cheatsheet
-A beginner guide for getting started with running python on nyu greene hpc. 
+A beginner guide for getting started with running python on nyu greene hpc, featuring conda environment setup wizards.
+
+
+Feel free to raise an issue if you have any questions. 
 
 ## Table of Contents
 * Basic Information
@@ -20,9 +23,10 @@ A beginner guide for getting started with running python on nyu greene hpc.
 	* [Some linux commands could not be executed](TroubleShooting.md#some-linux-commands-could-not-be-executed)
 * [Advanced Tricks](AdvancedTricks.md)
 
+***
 ## Prerequisits
 ### Apply for NYU Greene HPC access
-Just follow the [official guide](https://www.nyu.edu/life/information-technology/research-computing-services/high-performance-computing/high-performance-computing-nyu-it/hpc-accounts-and-eligibility.html#eligibility). If you are an NYU student, you do need a faculty sponsor to apply for an account.
+Just follow the [official guide](https://www.nyu.edu/life/information-technology/research-computing-services/high-performance-computing/high-performance-computing-nyu-it/hpc-accounts-and-eligibility.html#eligibility). If you are a NYU student, you do need a faculty sponsor to apply for an account.
 
 ### Basic Linux commands
 There are lots of linux beginner guide online. Pick anyone you like, for example the cheat sheet from [GeeksforGeeks](https://www.geeksforgeeks.org/linux-commands-cheat-sheet/). Or just ask chatGPT, it knows everything.

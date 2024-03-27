@@ -42,7 +42,7 @@ The reason is mainly because you installed too many extensions in vscode. After 
 
 
 ## Out of Memory Error
-### Check GPU Runtime
+### Check GPU Status
 When encounting error of "CUDA out of memory", you might want to monitor the GPU memory usage. You can check the GPU memory usage by:
 ```
 nvidia-smi
@@ -54,12 +54,29 @@ watch -n 1 nvidia-smi
 I personally recommend logging in the same GPU node using two terminals, one for running your code, the other for monitoring the GPU memory usage. It's easy to do in both terminal and vscode integrated terminal. <br>
 Check [this](#how-can-i-jump-back-when-kicked-off-by-accident) for how to jump to the desired node.
 
-
-
-### Check CPU Runtime
+### Check CPU Status
 ```
 ssh <node-name>
 top -u $USER
 ```
 
 
+## Could not open singularity environment
+If you encounter the following error
+```
+FATAL:   while loading overlay images: failed to open overlay image ...
+```
+It's most probably because you are trying to open the singularity environment while another process is writing the overlay. <br>
+
+The command for opening the singularity environment is: `singularity exec --nv --bind $data_dir --overlay $overlay:rw $singularity_file /bin/bash`, here `:rw` stands for `Read and Write` mode, and you can change it to `:ro` for `Read only` mode. <br>
+
+An singularity overlay could only be opened in multiple processes using `Read Only` mode. <br>
+
+If you open the overlay in `Read and Write` mode in a CPU/GPU node, <span style="color:orange"> then go to that node and exit the overlay, or kill that node </span>. Go back and check [How Can I Quit](#how-can-i-quit) for instructions.<br>
+
+If you open the overlay in `Read and Write` mode in login node, and you are kicked off from HPC by accident, <span style="color:orange"> then unfortunately you have to delete the overlay and start again. </span> <br>
+
+The recommended way is to open the overlay in `Read and Write` mode in CPU/GPU node only when you want to install python packages, and open in `Read only` mode in all other cases. 
+
+## Some linux commands could not be executed
+If commands like `myquota`, `squeue`, `scancel` could not be executed, then probably you are inside the singularity environment. You can only use these commands outside the singularity environment. <br>

@@ -20,7 +20,7 @@ if [ -d $env_dir ]; then
             "start singularity env in read only mode")
                 singularity_file=$(find "$env_dir" -type f -name "*cuda*" | head -n 1)
                 overlay=$(find "$env_dir" -type f -name "*overlay*" | head -n 1)
-                echo "Entering singularity $folder_name"
+                echo "Entering singularity $folder_name in read only mode"
                 echo "Always remember to activate your conda environment by typing: source /ext3/env.sh"
                 singularity exec --nv --bind $data_dir --overlay $overlay:ro $singularity_file /bin/bash
                 exit 1
@@ -29,6 +29,8 @@ if [ -d $env_dir ]; then
             "start singularity env in read and write mode")
                 singularity_file=$(find "$env_dir" -type f -name "*cuda*" | head -n 1)
                 overlay=$(find "$env_dir" -type f -name "*overlay*" | head -n 1)
+                echo "Entering singularity $folder_name in read and write mode"
+                echo "Always remember to activate your conda environment by typing: source /ext3/env.sh"
                 singularity exec --nv --bind $data_dir --overlay $overlay:rw $singularity_file /bin/bash
                 exit 1
                 break

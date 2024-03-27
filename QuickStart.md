@@ -6,40 +6,51 @@ If you are not interested in how HPC operates, and just want to set up a python 
 ssh <netid>@greene.hpc.nyu.edu
 ```
 #### Step2: Change to your scratch directory
-HPC Greene grants you an extremely small disk quota of `space50GB/files30K` in your home directory, which is not sufficient for storing your project and python libraries. You should always save your data in scratch directory.<br>
-Replace <netid> with your own.
+You should always save your data in scratch directory.<br>
+Replace `<netid>` with your own.
 
 ```
 cd /scratch/<netid>
 ```
 
 #### Step3: Request an interactive CPU/GPU session
-It's always a good practice to request for a CPU/GPU node before running any code. I wrote a shell script to help you request a CPU/GPU node.
+It's always a good practice to request for a CPU/GPU node before running any code. <br> 
+Download the shell script I wrote for requesting CPU/GPU nodes.
 ```
-wget https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/HPC_DEVICE_REQUEST.sh
-chmod +rx HPC_DEVICE_REQUEST.sh
+wget https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/chsdevice.sh
+chmod +rx chsdevice.sh
 ```
-(You only need to run the previous download command once. After that, you can run the following command to request a CPU/GPU node.)
+Run the script to request a CPU/GPU node.
 ```
-./HPC_DEVICE_REQUEST.sh
+./chsdevice.sh
 ```
+(fun fact: chs stands for cheatsheet. Typing the full name is too tiring.)
+
+<details>
+	<summary style="color:orange">What runtime configuration shall I use?</summary>
+	- `CPU number`: In most cases, having 1 or 2 is sufficient.<br>
+	- `GPU number`: Should be based on your project. If you don't know GPU parallel computing, then require for 1, or 0 for no GPU.<br>
+	- `GPU Type`: A100 40GB is the fastest but you have to wait for a long time to get allocated; V100 32GB is in the middle, RTX8000 48GB is the slowest, but easy to get access.
+	- `Memory (GB)`: This is the memory for CPUs. 64 works in most cases.
+	- `Time (hours)`: This is the maximum time you can use the CPU/GPU node. I recommend 4 or 6 hours.
+</details>
 
 
 #### Step4: Setup the singularity environment with conda
 You can consider `singularity` as a container that wraps up all small programs in python libraries into one large file. In this way, you won't be bothered with errors cause by exceeding quota of file number. <br>
 Good news is that you don't have to setup singularity with conda installed from scratch any more. <br>
-Download the shell script I wrote, and it will do all the work for you.
+Download the shell script for setting and launching singularity.
 ```
-wget https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/HPC_SING_LAUNCHER.sh
-chmod +rx HPC_SING_LAUNCHER.sh
+wget https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/chslauncher.sh
+chmod +rx chslauncher.sh
 ```
-(You only need to run the previous download command once.)
+Run the script to setup singularity and conda.
 ```
-./HPC_SING_LAUNCHER.sh
+./chslauncher.sh
 ```
 <details>
-	<summary>What do these prompted options mean during installation?</summary>
-	- `Name Your Singularity Folder`: Since you can have multiple singularity environments, you should give a unique name to your singularity folder. You will use this name to activate your singularity environment. It's a good practice to set up a new singularity environment for each project.<br>
+	<summary style="color:orange">What do these prompted options mean during installation?</summary>
+	- `Name Your Singularity Folder`: Since you can have multiple singularity environments, you should give a unique name to your singularity folder. <span style="color:orange">You will use this name to activate your singularity environment.</span> It's a good practice to set up a new singularity environment for each project.<br>
 	- `cuda version`: This should be based on your project. If not specified, cuda 11.8 works for most cases.<br>
 	- `Size of overlay`: This decides how large and how many python libraries you can install. For LLM or Diffusers projects, I empirically recommand `overlay-50G-10M`.
 </details>
@@ -47,10 +58,28 @@ chmod +rx HPC_SING_LAUNCHER.sh
 #### Step5: Activate the singularity and conda environment
 Run the sample script again, and type in your singularity folder name that you created in the previous step.
 ```
-./HPC_SING_LAUNCHER.sh
+./chslauncher.sh
 ```
+If you see your terminal prompt changes to `singularity:~$`, then you are successfully activated the singularity environment. <br>
 <details>
-	<summary>What's the different between Read and Write mode?</summary>
+	<summary style="color:orange">What's the different between Read and Write mode?</summary>
 	- `Read and Write`: You can add files into the singularity. This is useful when you are setting up your conda environment. However, one singularity overlay can only be written by one process at a time. <br>
 	- `Read only`: You can only read the files in the singularity environment. This is useful when you want to use a pre-built singularity environment.
 </details>
+
+#### Step6: Double check the conda environment, and start coding
+Once you activated your conda environment inside singularity using `source /ext3/env.sh`, check your conda path by
+```
+which conda
+```
+If you see `/ext3/miniconda3/bin/conda`, then you are good to go. <br>
+
+If you get message like `Illegal option --` `Usage: /usr/bin/which [-a] args`, Don' panic, run 
+```
+unset -f which
+```
+Then type `which conda` again. <br>
+
+You can also check python and pip using `which python` and `which pip`. Their path should be `/ext3/miniconda3/bin/python` and `/ext3/miniconda3/bin/pip` respectively. <br>
+
+Now you are all set. Install your python libaries, and run python using `python file.py`, just like you do in the terminal on your local machine. <br>Note that vscode python debugger won't work in HPC, so you have to test the code in vscode integrated terminal.

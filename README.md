@@ -2,9 +2,10 @@
 A beginner guide for getting started with running python on nyu greene hpc. 
 
 ## Table of Contents
-* [Prerequisits](#prerequisits)
-* [Access HPC](#access-hpc)
-* [HPC File System](#hpc-file-system)
+* Basic Information Inside README
+	* [Prerequisits](#prerequisits)
+	* [Access HPC](#access-hpc)
+	* [HPC File System](#hpc-file-system)
 * [Quick Start for Conda Environment](QuickStart.md) <- Check this if you are lazy and just want to get your python code running
 * [Manual Setup](MaunalSetup.md)
 * [Trouble Shooting](TroubleShooting.md)
@@ -12,7 +13,7 @@ A beginner guide for getting started with running python on nyu greene hpc.
 	* [How can I jump back when kicked off by accident?](TroubleShooting.md#how-can-i-jump-back-when-kicked-off-by-accident)
 	* [Disk quota exceeded](TroubleShooting.md#disk-quota-exceeded)
 	* [Could not login server through vscode](TroubleShooting.md#could-not-login-server-through-vscode)
-	* [Out of Memory Error (Check CPU?GPU Status)](TroubleShooting.md#out-of-memory-error)
+	* [Out of Memory Error](TroubleShooting.md#out-of-memory-error)
 		* [Check GPU Status](TroubleShooting.md#check-gpu-status)
 		* [Check CPU Status](TroubleShooting.md#check-cpu-status)
 	* [Could not open singularity environment](TroubleShooting.md#could-not-open-singularity-environment)

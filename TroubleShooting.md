@@ -1,4 +1,4 @@
-#Trouble Shooting
+# Trouble Shooting
 
 ## How Can I quit?
 * `Ctrl + C` for killing a running python program (or other running programs) in terminal (not sure for windows, but it works for mac and linux)

@@ -83,3 +83,5 @@ Then type `which conda` again. <br>
 You can also check python and pip using `which python` and `which pip`. Their path should be `/ext3/miniconda3/bin/python` and `/ext3/miniconda3/bin/pip` respectively. <br>
 
 Now you are all set. Install your python libaries, and run python using `python file.py`, just like you do in the terminal on your local machine. <br>Note that vscode python debugger won't work in HPC, so you have to test the code in vscode integrated terminal.
+
+> If you want to quit the singularity, or meet any other problems, check the [trouble shooting](Troubleshooting.md) guide.

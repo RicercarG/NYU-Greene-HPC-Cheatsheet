@@ -2,7 +2,7 @@
 A beginner guide for getting started with running python on nyu greene hpc. 
 
 ## Table of Contents
-* Basic Information Inside README
+* Basic Information
 	* [Prerequisits](#prerequisits)
 	* [Access HPC](#access-hpc)
 	* [HPC File System](#hpc-file-system)
@@ -76,6 +76,10 @@ This is where you can archive your large data. It's not often used.
 ### Vast [space2TB/files5M]
 Another place to store your data, ideal for high I/O data that may bottleneck on the scratch file system. I don't use it personally.
 
+
+>Now that you understand the basic of HPC. <br>
+Move on to the [Quick Start](QuickStart.md) guide to get your python code running. <br>
+Or check the [Manual Setup](MaunalSetup.md) guide to set up your own conda and singularity environment.
 
 
 ## Acknowledgement

@@ -1,7 +1,11 @@
 # NYU-Greene-HPC-Cheatsheet
 A beginner guide for getting started with running python on nyu greene hpc.
 
-Check the wiki page for detailed instructions.
+Each time I want to setup a new environment on NYU Greene HPC, I have to go through the official documentation and search for the commands I need. So I decided to write a cheatsheet for myself and others who may need it.
+
+I wrote some complex commands into bash scripts, so that getting python run flawlessly on NYU Greene HPC is as simple as ordering a burger in a fast food restaurant.
+
+Check the [wiki page](https://github.com/RicercarG/NYU-Greene-HPC-Cheatsheet/wiki) to get started.
 
 ## Acknowledgement
 * The official documentation: [HPC Home](https://sites.google.com/nyu.edu/nyu-hpc/home?authuser=0)

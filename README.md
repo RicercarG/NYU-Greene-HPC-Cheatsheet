@@ -23,7 +23,7 @@ Update: The most essential parts have been finished. Here is the to-do list:
 	- [x] Request CPU/GPU Sessions
 	- [x] Interactive sessions for conda
 	- [x] Jupyter Notebook
-	- [ ] Batch jobs
+	- [x] Batch jobs
 * Manual Setup
 	- [x] Offical guide Index
 * Trouble Shooting
@@ -34,7 +34,7 @@ Update: The most essential parts have been finished. Here is the to-do list:
 	- [x] Out of Memory Error
 	- [x] Could not open singularity environment
 	- [x] Some linux commands could not be executed
-* Advanced Tricks
+* Useful Tricks
 	- [ ] Setup bashrc
 	- [ ] Setup ssh key pairs
 	- [x] File management commands

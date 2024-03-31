@@ -10,10 +10,11 @@ used_for_ood=0
 install_new_env=1
 
 GREEN='\033[0;32m'
+GRAY='\033[0;30m'
 NC='\033[0m' # No Color
 
-echo "Singularity Folder Name: (type anything if you want to create a new one, no space allowed)"
-read folder_name
+echo -e "Creating/Activating singularity environment ${GRAY}(no space allowed in folder name)${NC}"
+read -p "Singularity Folder Name: " folder_name
 
 env_dir="$root_dir/$folder_name"
 
@@ -22,7 +23,9 @@ if [ -d $env_dir ]; then
     echo "$folder_name is found."
     singularity_file=$(find "$env_dir" -type f -name "*cuda*" | head -n 1)
     overlay=$(find "$env_dir" -type f -name "*overlay*" | head -n 1)
-    options=("start singularity env in read only mode" "start singularity env in read and write mode" "setup this environment for jupyter notebook in OOD" "reinstall singularity env")
+    echo -e  "Overlay found at ${GREEN}$overlay${NC}"
+    echo -e "Singularity file found at ${GREEN}$singularity_file${NC}"
+    options=("start singularity env in read only mode" "start singularity env in read and write mode" "setup this environment for jupyter notebook in OOD" "reinstall singularity env" "exit")
     select opt in "${options[@]}"; do
         case $opt in
             "start singularity env in read only mode")
@@ -57,6 +60,9 @@ if [ -d $env_dir ]; then
                     exit 1
                 fi
                 break
+                ;;
+            "exit")
+                exit 1
                 ;;
             *) 
                 echo "Invalid option"
@@ -198,9 +204,12 @@ if [ $used_for_ood -eq 1 ]; then
 fi
 
 echo -e "${GREEN}You are all set!${NC}"
+echo -e  "Overlay is stored at ${GREEN}$overlay${NC}"
+echo -e "Singularity file is stored at ${GREEN}$singularity_file${NC}"
+echo
 echo -e "To start the singularity, type ${GREEN}./chslauncher.sh${NC} to run this script again"
-echo "You can also manually start this singularity using:"
-echo "singularity exec --nv --bind $data_dir --overlay $overlay.ext3:rw $singularity_file /bin/bash"
+echo -e "${GRAY}You can also manually start this singularity using:"
+echo -e "singularity exec --nv --bind $data_dir --overlay $overlay:rw $singularity_file /bin/bash${NC}"
 
 
 

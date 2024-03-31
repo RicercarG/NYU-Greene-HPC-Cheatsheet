@@ -25,9 +25,7 @@ Update: The most essential parts have been finished. Here is the to-do list:
 	- [x] Jupyter Notebook
 	- [ ] Batch jobs
 * Manual Setup
-	- [x] Offical guide links
-	- [ ] Set up your own singularity and conda
-	- [ ] Set up your own jupyter notebook
+	- [x] Offical guide Index
 * Trouble Shooting
 	- [x] How can I quit python/singualrity/runtime?
 	- [x] How can I jump back when kicked off by accident?

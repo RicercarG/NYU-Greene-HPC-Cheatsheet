@@ -6,8 +6,16 @@ root_dir=$(dirname "$(realpath "$0")")
 IFS='/' read -ra root_dir_list <<< "$root_dir"
 data_dir="/${root_dir_list[1]}/${root_dir_list[2]}"
 
+if [[ "$*" == *"--no-check-certificate"* ]]; then
+    nocheck="--no-check-certificate"
+else
+    nocheck=""
+fi
+
+
 used_for_ood=0
 install_new_env=1
+install_new_conda=1
 
 GREEN='\033[0;32m'
 GRAY='\033[0;30m'
@@ -25,7 +33,7 @@ if [ -d $env_dir ]; then
     overlay=$(find "$env_dir" -type f -name "*overlay*" | head -n 1)
     echo -e  "Overlay found at ${GREEN}$overlay${NC}"
     echo -e "Singularity file found at ${GREEN}$singularity_file${NC}"
-    options=("start singularity env in read only mode" "start singularity env in read and write mode" "setup this environment for jupyter notebook in OOD" "reinstall singularity env" "exit")
+    options=("start singularity env in read only mode" "start singularity env in read and write mode" "setup this environment for jupyter notebook in OOD" "reinstall singularity env" "reinstall conda inside the singularity" "exit")
     select opt in "${options[@]}"; do
         case $opt in
             "start singularity env in read only mode")
@@ -44,6 +52,7 @@ if [ -d $env_dir ]; then
                 ;;
             "setup this environment for jupyter notebook in OOD")
                 install_new_env=0
+                install_new_conda=0
                 used_for_ood=1
                 break
                 ;;
@@ -56,6 +65,20 @@ if [ -d $env_dir ]; then
                 if [[ "$warning" == "y" || "$warning" == "yes" ]]; then
                     rm -rf $env_dir
                     rm -rf ~/.local/share/jupyter/kernels/$folder_name
+                else
+                    exit 1
+                fi
+                break
+                ;;
+            "reinstall conda inside the singularity")
+                read -p "All python packages installed in the conda (if exists) will be removed. Are you sure to reinstall it? [y]/n: " warning
+                # Convert the input to lowercase
+                warning=$(echo "$warning" | tr '[:upper:]' '[:lower:]')
+
+                # Check if the input is 'y' or 'yes', set boolean variable accordingly
+                if [[ "$warning" == "y" || "$warning" == "yes" ]]; then
+                    anaconda-clean --yes
+                    install_new_env=0
                 else
                     exit 1
                 fi
@@ -142,17 +165,21 @@ if [ $install_new_env -eq 1 ]; then
     gunzip $env_dir/$overlay.gz
     echo "unzip finished"
 
-
-    # start overlay and download conda
     overlay=$env_dir/$overlay
     singularity_file=$env_dir/$singularity_file
+fi
+
+if [ $install_new_conda -eq 1 ]; then
+    # start overlay and download conda
+
     singularity exec --nv --bind $data_dir --overlay $overlay:rw $singularity_file /bin/bash -c "
     # download and install miniconda
-    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    wget $nocheck https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
     bash Miniconda3-latest-Linux-x86_64.sh -b -p /ext3/miniconda3
     rm Miniconda3-latest-Linux-x86_64.sh
 
-    wget -O /ext3/env.sh https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/env.sh
+    wget $nocheck -O /ext3/env.sh https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/env.sh
 
     # init conda
     source /ext3/env.sh

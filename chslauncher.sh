@@ -7,10 +7,10 @@ root_dir="/scratch/$USER"
 IFS='/' read -ra root_dir_list <<< "$root_dir"
 data_dir="/${root_dir_list[1]}/${root_dir_list[2]}"
 
-if [[ "$*" == *"--check-certificate"* ]]; then
-    nocheck=""
-else
+if [[ "$*" == *"--no-check-certificate"* ]]; then
     nocheck="--no-check-certificate"
+else
+    nocheck=""
 fi
 
 
@@ -240,7 +240,7 @@ echo -e "${GREEN}You are all set!${NC}"
 echo -e  "Overlay is stored at ${GREEN}$overlay${NC}"
 echo -e "Singularity file is stored at ${GREEN}$singularity_file${NC}"
 echo
-echo -e "To start the singularity, type ${GREEN}./chslauncher.sh${NC} to run this script again"
+echo -e "To start the singularity, type ${GREEN}chslauncher.sh${NC} or ${GREEN}clc${NC} to run this script again"
 echo -e "${GRAY}You can also manually start this singularity using:"
 echo -e "singularity exec --nv --bind $data_dir --overlay $overlay:rw $singularity_file /bin/bash${NC}"
 

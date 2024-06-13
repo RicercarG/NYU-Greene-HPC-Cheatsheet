@@ -1,6 +1,6 @@
 #!/bin/bash
 
-root_dir=$(dirname "$(realpath "$0")")
+script_dir=$(dirname "$(realpath "$0")")
 
 is_integer() {
     [[ $1 =~ ^[0-9]+$ ]]
@@ -21,7 +21,7 @@ if [ "$num_cpu" -ne 0 ]; then
     fi
     if [ "$num_gpu" -ne 0 ]; then
         echo "What GPU do you want":
-        options=("rtx8000" "v100" "a100")
+        options=("rtx8000" "v100" "a100" "h100")
         select opt in "${options[@]}"; do
             case $opt in 
                 "rtx8000")
@@ -34,6 +34,10 @@ if [ "$num_cpu" -ne 0 ]; then
                     ;;
                 "a100")
                     gpu_type="a100"
+                    break
+                    ;;
+                "h100")
+                    gpu_type="h100"
                     break
                     ;;
                 *) 

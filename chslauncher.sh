@@ -1,15 +1,16 @@
 #!/bin/bash
 
-root_dir=$(dirname "$(realpath "$0")")
+script_dir=$(dirname "$(realpath "$0")")
+root_dir="/scratch/$USER"
 
 # Extract the whole data directory for singularity binding
 IFS='/' read -ra root_dir_list <<< "$root_dir"
 data_dir="/${root_dir_list[1]}/${root_dir_list[2]}"
 
-if [[ "$*" == *"--no-check-certificate"* ]]; then
-    nocheck="--no-check-certificate"
-else
+if [[ "$*" == *"--check-certificate"* ]]; then
     nocheck=""
+else
+    nocheck="--no-check-certificate"
 fi
 
 
@@ -111,7 +112,7 @@ if [ $install_new_env -eq 1 ]; then
 
     # choose what cuda version for your ubuntu system
     echo "Choose the cuda version":
-    options=("cuda 11.3" "cuda 11.6" "cuda 11.8")
+    options=("cuda 11.3" "cuda 11.6" "cuda 11.8" "cuda 12.1")
     select opt in "${options[@]}"; do
         case $opt in
             "cuda 11.3")
@@ -126,6 +127,10 @@ if [ $install_new_env -eq 1 ]; then
                 ;;
             "cuda 11.8")
                 singularity_file="cuda11.8.86-cudnn8.7-devel-ubuntu22.04.2.sif"
+                break
+                ;;
+            "cuda 12.1")
+                singularity_file="cuda12.1.1-cudnn8.9.0-devel-ubuntu22.04.2.sif"
                 break
                 ;;
             *) 
@@ -179,7 +184,8 @@ if [ $install_new_conda -eq 1 ]; then
     bash Miniconda3-latest-Linux-x86_64.sh -b -p /ext3/miniconda3
     rm Miniconda3-latest-Linux-x86_64.sh
 
-    wget $nocheck -O /ext3/env.sh https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/env.sh
+    # wget $nocheck -O /ext3/env.sh https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/env.sh
+    cp $script_dir/env.sh /ext3/env.sh
 
     # init conda
     source /ext3/env.sh

@@ -2,12 +2,12 @@
 
 #SBATCH --job-name=YourNameHere
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=64GB
 #SBATCH --time=6:00:00         # max time for running this job
 #SBATCH --gres=gpu:1           # request for any gpu available
 ##SBATCH --gres=gpu:v100:1     # [alternative]request for a specific gpu
+##SBATCH --output=log/slurm-%j.out # [optional] output log file, need to create a folder named log
 
 # Singularity path
 ext3_path=YourEXT3PATH.ext3

@@ -36,8 +36,12 @@ Please feel free to open an issue if you have any questions or suggestions.
 	- [x] Out of Memory Error
 	- [x] Could not open singularity environment
 	- [x] Some linux commands could not be executed
-* Useful Tricks
+* Advanced Topics (Useful Tricks)
 	- [x] Setup bashrc
 	- [x] Setup ssh key pairs
-	- [x] File management commands
-	- [x] Access through iPad
+    - [ ] Collection of useful linux commands
+    - [x] Sharing files with Other HPC Users
+    - [x] Sending files to/from HPC
+    - [ ] SSH Tunneling on GPU Nodes
+    - [x] AWS S3 Connection
+    - [x] Access through iPad

@@ -13,6 +13,16 @@ I wrote some complex commands into bash scripts, so that getting python run flaw
 * The official documentation: [HPC Home](https://sites.google.com/nyu.edu/nyu-hpc/home?authuser=0)
 * I started my journey with HPC by following [HPC Notes by Hammond Liu](https://abstracted-crime-34a.notion.site/63aae4cc39904d11a5c744f480a42017?v=261a410e1fe24d0294ed744c21a41015&p=7ed5e95ce1dc400898f6462f6de47d2c&pm=s)
 
+## Important updates (planning to move this section to Releases)
+- [2025.5.29] A [y]/n option is added when the user is prompted to create a new environment. A new folder will only be created if the user enters "y" or "yes". This is to prevent creating unnecessary folders when the user made a typo when activating existing environment.
+
+- [2024.6.13] The file structure has undergone a significant change. Now you can clone the entire repo. **If you have used this cheatsheet before, please first remove `chsdevice.sh` and `chslauncher.sh` on your hpc. Then follow the updated wiki instruction to setup your environment.** New features are as following:
+	- The new file structure is more organized and easier to maintain.
+	- A new run_setup.sh script is added to help you setup `~/.bashrc` file automatically.
+	- Added options for H100 GPU and cuda 12.1
+
+- [2024.4.7] Bug fix for handling conda installation failure in Lazy Launcher. Check [[ this part of troubleshooting|Trouble Shooting#conda-environment-installation-failed ]] for detail.
+
 ## Topics covered in this cheatsheet
 Please feel free to open an issue if you have any questions or suggestions.
 * Prereq

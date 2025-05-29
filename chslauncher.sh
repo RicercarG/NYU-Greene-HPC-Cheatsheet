@@ -95,7 +95,15 @@ if [ -d $env_dir ]; then
         esac
     done
 else
-    echo "No existing $folder_name found. Start creating a new one"
+    # echo "No existing $folder_name found. Start creating a new one"
+    read -p "No existing $folder_name found. Do you want to create a new one? [y]/n: " answer
+    # Convert the input to lowercase
+    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+
+    # quit if answer is not y or yes
+    if [[ "$answer" != "y" && "$answer" != "yes" ]]; then
+       exit 1
+    fi
 fi
 
 if [ $install_new_env -eq 1 ]; then

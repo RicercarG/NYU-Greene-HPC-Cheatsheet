@@ -95,20 +95,12 @@ if [ -d $env_dir ]; then
         esac
     done
 else
-    # echo "No existing $folder_name found. Start creating a new one"
-    read -p "No existing $folder_name found. Do you want to create a new one? [y]/n: " answer
-    # Convert the input to lowercase
-    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
-
-    # quit if answer is not y or yes
-    if [[ "$answer" != "y" && "$answer" != "yes" ]]; then
-       exit 1
-    fi
+    echo "No existing $folder_name found. Start creating a new one"
 fi
 
 if [ $install_new_env -eq 1 ]; then
     # Create folder
-    mkdir $env_dir
+    mkdir -p $env_dir
 
     # Check if folder creation was successful
     if [ $? -eq 0 ]; then
@@ -118,9 +110,11 @@ if [ $install_new_env -eq 1 ]; then
         exit 1
     fi
 
+    CUSTOM_BUILD=0  
+
     # choose what cuda version for your ubuntu system
     echo "Choose the cuda version":
-    options=("cuda 11.3" "cuda 11.6" "cuda 11.8" "cuda 12.1")
+    options=("cuda 11.3" "cuda 11.6" "cuda 11.8" "cuda 12.1" "Custom CUDA version (build from Docker Hub)")
     select opt in "${options[@]}"; do
         case $opt in
             "cuda 11.3")
@@ -141,14 +135,56 @@ if [ $install_new_env -eq 1 ]; then
                 singularity_file="cuda12.1.1-cudnn8.9.0-devel-ubuntu22.04.2.sif"
                 break
                 ;;
-            *) 
+            "Custom CUDA version (build from Docker Hub)")
+            read -rp "Enter CUDA major.minor (e.g. 12.4): " cuda_ver
+            if [[ ! $cuda_ver =~ ^[0-9]+\.[0-9]+$ ]]; then
+                echo "Invalid CUDA version format. Exiting."; exit 1; fi
+            singularity_file="cuda-${cuda_ver}.sif"
+            CUSTOM_BUILD=1
+            break;;
+            *)
                 echo "Invalid option"
                 exit 1
                 ;;
         esac
     done
 
-    cp -rp /scratch/work/public/singularity/$singularity_file $env_dir
+    if [ "$CUSTOM_BUILD" -eq 0 ]; then
+    # Copy prebuilt campus image if not already present
+    if [ ! -f "$env_dir/$singularity_file" ]; then
+        cp -rp "/scratch/work/public/singularity/$singularity_file" "$env_dir/" 
+    fi
+    else
+    # Build custom SIF from Docker Hub tag: nvidia/cuda:${cuda_ver}.0-devel-ubuntu22.04
+    if [ ! -f "$env_dir/$singularity_file" ]; then
+        echo "Building CUDA $cuda_ver image; this may take several minutes…"
+        
+        # Try different minor versions to find the best available tag
+        major_minor=$(echo $cuda_ver | cut -d. -f1,2)
+        minor_versions=("0" "1" "2" "3" "4" "5")
+        
+        build_success=false
+        for minor in "${minor_versions[@]}"; do
+            docker_tag="nvidia/cuda:${major_minor}.${minor}-devel-ubuntu22.04"
+            echo "Attempting to build from Docker tag: $docker_tag"
+            
+            if singularity build "$env_dir/$singularity_file" "docker://$docker_tag"; then
+                echo "Successfully built with tag: $docker_tag"
+                build_success=true
+                break
+            else
+                echo "Failed with tag $docker_tag, trying next minor version..."
+            fi
+        done
+        
+        if [ "$build_success" = false ]; then
+            echo "Failed to build with any minor version for CUDA $cuda_ver"
+            echo "Please check if CUDA $cuda_ver is available on Docker Hub."
+            echo "You can check available tags at: https://hub.docker.com/r/nvidia/cuda/tags"
+            exit 1
+        fi
+    fi
+    fi
 
 
     # choose what singularity overlay
@@ -175,7 +211,7 @@ if [ $install_new_env -eq 1 ]; then
 
     cp -rp /scratch/work/public/overlay-fs-ext3/$overlay.gz $env_dir
     echo "unzipping your singularity $overlay, it will take a long time, please be patient"
-    gunzip $env_dir/$overlay.gz
+    gunzip -f $env_dir/$overlay.gz
     echo "unzip finished"
 
     overlay=$env_dir/$overlay
@@ -185,32 +221,55 @@ fi
 if [ $install_new_conda -eq 1 ]; then
     # start overlay and download conda
 
-    singularity exec --nv --bind $data_dir --overlay $overlay:rw $singularity_file /bin/bash -c "
-    # download and install miniconda
-    wget $nocheck https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    if [ "$CUSTOM_BUILD" -eq 1 ]; then
+        # For custom builds, download Miniconda on host first since container has no wget
+        echo "Downloading Miniconda installer on host..."
+        wget $nocheck -O "$env_dir/Miniconda3-latest-Linux-x86_64.sh" \
+            https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        
+        singularity exec --nv --bind $data_dir,$script_dir --overlay $overlay:rw $singularity_file /bin/bash -c "
+        # Copy and install miniconda
+        cp /mnt/$folder_name/Miniconda3-latest-Linux-x86_64.sh /ext3/
+        bash /ext3/Miniconda3-latest-Linux-x86_64.sh -b -p /ext3/miniconda3
+        rm /ext3/Miniconda3-latest-Linux-x86_64.sh
 
-    bash Miniconda3-latest-Linux-x86_64.sh -b -p /ext3/miniconda3
-    rm Miniconda3-latest-Linux-x86_64.sh
+        # Copy env.sh from script directory
+        cp $script_dir/env.sh /ext3/env.sh
 
-    # wget $nocheck -O /ext3/env.sh https://raw.githubusercontent.com/RicercarG/NYU-Greene-HPC-Cheatsheet/main/env.sh
-    cp $script_dir/env.sh /ext3/env.sh
+        # init conda
+        source /ext3/env.sh
 
-    # init conda
-    source /ext3/env.sh
+        # Install essential tools for custom builds
+        conda install -c conda-forge -y git nano wget curl
+    else
+        # For prebuilt images, use wget inside container
+        singularity exec --nv --bind $data_dir,$script_dir --overlay $overlay:rw $singularity_file /bin/bash -c "
+        # download and install miniconda
+        wget $nocheck https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
-    echo 'setting up base conda environment'
+        bash Miniconda3-latest-Linux-x86_64.sh -b -p /ext3/miniconda3
+        rm Miniconda3-latest-Linux-x86_64.sh
 
-    conda update -n base conda -y
-    conda clean --all --yes
-    conda install pip -y
-    conda install ipykernel -y
+        # Copy env.sh from script directory
+        cp $script_dir/env.sh /ext3/env.sh
 
-    unset -f which
+        # init conda
+        source /ext3/env.sh
 
-    echo 'conda installed'
-    which conda
-    which pip
-    "
+        echo 'setting up base conda environment'
+
+        conda update -n base conda -y
+        conda clean --all --yes
+        conda install pip -y
+        conda install ipykernel -y
+
+        unset -f which
+
+        echo 'conda installed'
+        which conda
+        which pip
+        "
+    fi
 
     read -p "Do you want to use this python environment in open on demand jupyter notebook? [y]/n: " answer
     # Convert the input to lowercase

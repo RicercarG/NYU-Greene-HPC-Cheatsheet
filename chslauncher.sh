@@ -211,8 +211,20 @@ if [ $install_new_env -eq 1 ]; then
 
     cp -rp /scratch/work/public/overlay-fs-ext3/$overlay.gz $env_dir
     echo "unzipping your singularity $overlay, it will take a long time, please be patient"
+    
+    # Save current directory before gunzip
+    original_pwd=$(pwd)
     gunzip -f $env_dir/$overlay.gz
+    # Restore working directory after gunzip
+    cd "$original_pwd"
+    
     echo "unzip finished"
+    
+    # Ensure the overlay file exists and is ready
+    if [ ! -f "$env_dir/$overlay" ]; then
+        echo "Error: Overlay file was not created properly"
+        exit 1
+    fi
 
     overlay=$env_dir/$overlay
     singularity_file=$env_dir/$singularity_file
@@ -227,34 +239,33 @@ if [ $install_new_conda -eq 1 ]; then
         wget $nocheck -O "$env_dir/Miniconda3-latest-Linux-x86_64.sh" \
             https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
         
-        singularity exec --nv --bind $data_dir,$script_dir --overlay $overlay:rw $singularity_file /bin/bash -c "
+        # Change to the environment directory so the bind mount includes the Miniconda installer
+        cd "$env_dir"
+        singularity exec --nv --bind $(pwd):/mnt --overlay $overlay:rw $singularity_file /bin/bash -c "
         # Copy and install miniconda
-        cp /mnt/$folder_name/Miniconda3-latest-Linux-x86_64.sh /ext3/
+        cp /mnt/Miniconda3-latest-Linux-x86_64.sh /ext3/
         bash /ext3/Miniconda3-latest-Linux-x86_64.sh -b -p /ext3/miniconda3
         rm /ext3/Miniconda3-latest-Linux-x86_64.sh
 
-        # Copy env.sh from script directory
-        cp $script_dir/env.sh /ext3/env.sh
+        # Create env.sh with here-doc for custom builds
+        cat << 'EOF' > /ext3/env.sh
+#!/bin/bash
+unset -f which
+source /ext3/miniconda3/etc/profile.d/conda.sh
+export PATH=/ext3/miniconda3/bin:\$PATH
+export PYTHONPATH=/ext3/miniconda3/bin:\$PATH
+EOF
+        chmod +x /ext3/env.sh
 
         # init conda
         source /ext3/env.sh
 
+        # Accept conda Terms of Service first
+        conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+        conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+        
         # Install essential tools for custom builds
         conda install -c conda-forge -y git nano wget curl
-    else
-        # For prebuilt images, use wget inside container
-        singularity exec --nv --bind $data_dir,$script_dir --overlay $overlay:rw $singularity_file /bin/bash -c "
-        # download and install miniconda
-        wget $nocheck https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-
-        bash Miniconda3-latest-Linux-x86_64.sh -b -p /ext3/miniconda3
-        rm Miniconda3-latest-Linux-x86_64.sh
-
-        # Copy env.sh from script directory
-        cp $script_dir/env.sh /ext3/env.sh
-
-        # init conda
-        source /ext3/env.sh
 
         echo 'setting up base conda environment'
 
@@ -268,7 +279,41 @@ if [ $install_new_conda -eq 1 ]; then
         echo 'conda installed'
         which conda
         which pip
-        "
+        " 
+        # Restore original working directory
+        cd "$script_dir"
+    else
+        # For prebuilt images, use wget inside container
+        singularity exec --nv --bind $data_dir --overlay $overlay:rw $singularity_file /bin/bash -c "
+        # download and install miniconda
+        wget $nocheck https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+        bash Miniconda3-latest-Linux-x86_64.sh -b -p /ext3/miniconda3
+        rm Miniconda3-latest-Linux-x86_64.sh
+
+        # Copy env.sh from script directory
+        cp $script_dir/env.sh /ext3/env.sh
+
+        # init conda
+        source /ext3/env.sh
+
+        # Accept conda Terms of Service first
+        conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+        conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+
+        echo 'setting up base conda environment'
+
+        conda update -n base conda -y
+        conda clean --all --yes
+        conda install pip -y
+        conda install ipykernel -y
+
+        unset -f which
+
+        echo 'conda installed'
+        which conda
+        which pip
+        " 
     fi
 
     read -p "Do you want to use this python environment in open on demand jupyter notebook? [y]/n: " answer

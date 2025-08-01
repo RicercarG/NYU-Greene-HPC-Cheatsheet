@@ -14,6 +14,8 @@ I wrote some complex commands into bash scripts, so that getting python run flaw
 * I started my journey with HPC by following [HPC Notes by Hammond Liu](https://abstracted-crime-34a.notion.site/63aae4cc39904d11a5c744f480a42017?v=261a410e1fe24d0294ed744c21a41015&p=7ed5e95ce1dc400898f6462f6de47d2c&pm=s)
 
 ## Important updates (planning to move this section to Releases)
+- [2025.8.1] Added custom CUDA version support. Singularity will be built from scratch from Docker Hub. Note that this singularity has no cuDNN so you will need to install cuDNN yourself. The easiest way is to go to [Nvidia cuDNN Archive](https://developer.nvidia.com/rdp/cudnn-archive), download the version you want, scp to greene and install it.  
+
 - [2025.5.29] A [y]/n option is added when the user is prompted to create a new environment. A new folder will only be created if the user enters "y" or "yes". This is to prevent creating unnecessary folders when the user made a typo when activating existing environment.
 
 - [2024.6.13] The file structure has undergone a significant change. Now you can clone the entire repo. **If you have used this cheatsheet before, please first remove `chsdevice.sh` and `chslauncher.sh` on your hpc. Then follow the updated wiki instruction to setup your environment.** New features are as following:

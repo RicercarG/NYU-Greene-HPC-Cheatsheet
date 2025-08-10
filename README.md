@@ -58,3 +58,5 @@ Please feel free to open an issue if you have any questions or suggestions.
     - [x] AWS S3 Connection
     - [x] Access through iPad
     - [x] Using in-node memory for faster training
+    - [ ] Distributed training on multi-node using ```RDZV```, ```srun -W``` and ```torchrun```
+    - [ ] Submitting Topology-aware GPU jobs for NCCL-heavy training

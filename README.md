@@ -57,3 +57,4 @@ Please feel free to open an issue if you have any questions or suggestions.
     - [ ] SSH Tunneling on GPU Nodes
     - [x] AWS S3 Connection
     - [x] Access through iPad
+    - [x] Using in-node memory for faster training

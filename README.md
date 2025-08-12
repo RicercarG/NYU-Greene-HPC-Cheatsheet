@@ -57,6 +57,6 @@ Please feel free to open an issue if you have any questions or suggestions.
     - [ ] SSH Tunneling on GPU Nodes
     - [x] AWS S3 Connection
     - [x] Access through iPad
-    - [x] Using in-node memory for faster training
+    - [ ] Using in-node memory for faster training(move to Advanced Topics)
     - [ ] Distributed training on multi-node using ```RDZV```, ```srun -W``` and ```torchrun```
     - [ ] Submitting Topology-aware GPU jobs for NCCL-heavy training

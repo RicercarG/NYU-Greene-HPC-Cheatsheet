@@ -60,3 +60,4 @@ Please feel free to open an issue if you have any questions or suggestions.
     - [ ] Using in-node memory for faster training(move to Advanced Topics)
     - [ ] Distributed training on multi-node using ```RDZV```, ```srun -W``` and ```torchrun```
     - [ ] Submitting Topology-aware GPU jobs for NCCL-heavy training
+    - [ ] Use SLURM Job array to sweep hyper parameter and random seed

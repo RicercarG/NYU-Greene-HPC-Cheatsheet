@@ -63,12 +63,10 @@ if [ "$num_cpu" -ne 0 ]; then
 
   # load the account if possible
   if [ -f "$script_dir/account.txt" ]; then
-    account=$(cat account.txt)
+    account=$(cat "$script_dir/account.txt")
   else
     account=""
   fi
-
-  echo -e "${GREEN}Requesting device with project account $account ${NC}"
 
   # write the base command
   cmd="srun --nodes=1 --cpus-per-task="$num_cpu" --mem="$mem"GB --time="$time":00:00"
@@ -81,6 +79,7 @@ if [ "$num_cpu" -ne 0 ]; then
   # add account name if there's any
   if [ ${#account} -ne 0 ]; then
     cmd="$cmd --account="$account""
+    echo -e "${GREEN}Requesting device with project account $account ${NC}"
   fi
 
   # add interactive flag

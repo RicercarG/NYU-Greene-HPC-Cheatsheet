@@ -1,4 +1,7 @@
 # NYU-Greene-HPC-Cheatsheet
+
+> 🟨 NYU Greene HPC is retired. Check out [NYU-Torch-HPC-Cheatsheet](https://github.com/RicercarG/NYU-Torch-HPC-Cheatsheet) to keep going.
+
 Written by [Yuanhe Guo](https://ricercarg.github.io) (yg2709@nyu.edu)
 
 A beginner guide for getting started with running python on nyu greene hpc.
